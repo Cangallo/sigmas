@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptReciboAguaDetalle" language="groovy" pageWidth="345" pageHeight="100" columnWidth="345" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="738c5499-3115-4431-9306-d737c95f1e18">
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ParamCodigo" class="java.lang.String"/>
+	<parameter name="INIVENCIMIENTO" class="java.lang.Number"/>
+	<queryString>
+		<![CDATA[CALL `repConceptoAgua`($P{ParamCodigo})]]>
+	</queryString>
+	<field name="nvConcepto" class="java.lang.String"/>
+	<field name="dePagoInsoluto" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="19" splitType="Stretch">
+			<staticText>
+				<reportElement x="240" y="6" width="100" height="13" forecolor="#0000FF" uuid="3ecb74c2-f537-4d77-878c-15ced3c21bfa"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[IMPORTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="6" width="224" height="13" forecolor="#0000FF" uuid="64b27c18-3309-46f5-b8dd-1480e3d34466"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CONCEPTO]]></text>
+			</staticText>
+			<line>
+				<reportElement x="4" y="5" width="337" height="1" uuid="620dea99-a6d2-4ea4-8e16-6df3419cdb66"/>
+			</line>
+			<line>
+				<reportElement x="4" y="6" width="1" height="13" uuid="e913bee2-dd65-45c0-a80f-4104856abd46"/>
+			</line>
+			<line>
+				<reportElement x="240" y="6" width="1" height="13" uuid="b1f63494-6d0e-4249-9b77-5f2f27e743b8"/>
+			</line>
+			<line>
+				<reportElement x="340" y="6" width="1" height="13" uuid="5046f381-cb33-4595-ab51-45a8a97073aa"/>
+			</line>
+			<line>
+				<reportElement x="4" y="18" width="337" height="1" uuid="315f3511-71e5-4aae-9fbd-fdac0a78429e"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement x="16" y="0" width="224" height="13" uuid="de669884-504b-4793-b3e1-4f08a575b4ae"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nvConcepto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="241" y="0" width="101" height="13" uuid="2f4264d6-05e9-4170-879e-2834a26edd58"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["S/. "+$F{dePagoInsoluto}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="4" y="13" width="336" height="1" uuid="02daf8b9-c53a-45bb-a44d-61e692dda339"/>
+			</line>
+			<line>
+				<reportElement x="4" y="-1" width="1" height="14" uuid="d2fa3050-80dc-4530-b907-bb83978fa1f7"/>
+			</line>
+			<line>
+				<reportElement x="240" y="-1" width="1" height="14" uuid="0bdca718-f8d3-40af-aec8-701e5c4dbcd3"/>
+			</line>
+			<line>
+				<reportElement x="340" y="-1" width="1" height="15" uuid="b591d0b9-0cbe-41d3-b2ee-69d9f18c8f6b"/>
+			</line>
+		</band>
+	</detail>
+</jasperReport>

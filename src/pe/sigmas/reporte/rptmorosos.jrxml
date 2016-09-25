@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5e46361b-22b3-4d7d-8b96-1db750380965">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="ejerciciom" class="java.lang.Integer"/>
+	<parameter name="mesm" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT a.cCodRegContribuyente,a.nvRazoSocial,a.iIdEjercicio,CAST(a.dtFechVencimiento AS DATE) dtFechVencimiento
+       ,/*a.iIdValConcepto,h.cCodMaeConcepto,*/h.concepto,/*h.cCodMaeCategoria,*/h.categoria
+       /*,a.biIdRegRecibo,a.iIdVencimiento*/,a.deTotaInsoluto
+FROM
+		(  SELECT a.cCodRegContribuyente,d.nvRazoSocial,a.iIdEjercicio,a.dtFechVencimiento,a.iIdValConcepto,a.biIdRegRecibo,a.iIdVencimiento,
+			       a.deTotaInsoluto
+			FROM sisaguasaniamiento.regobligacion AS a
+			INNER JOIN ( SELECT b.cCodRegContribuyente,c.nvRazoSocial FROM sisaguasaniamiento.regcontribuyente as b
+							 INNER JOIN sisaguasaniamiento.regpersona AS c ON b.biIdRegPersona=c.biIdRegPersona
+							 WHERE b.bEstado=1 AND b.bIndActivo=1 AND c.bEstado=1
+			            ) as d ON d.cCodRegContribuyente=a.cCodRegContribuyente
+			
+			WHERE a.iIdEjercicio=ejerciciom AND  a.bEstado=1 AND MONTH(a.dtFechVencimiento)=mesm/*a.iIdVencimiento*/ AND a.cCodMaeEstaObligacion='00001'
+			
+		) AS a
+INNER JOIN 
+(
+	SELECT e.iIdValConcepto,e.cCodMaeConcepto,f.nvDenominacion concepto,e.cCodMaeCategoria,g.nvDenominacion categoria,e.cCodRegContribuyente,e.iIdVencimiento,e.bIndFijo
+	FROM sisaguasaniamiento.valconcepto as e
+	INNER JOIN sisaguasaniamiento.maeconcepto AS f ON e.cCodMaeConcepto=f.cCodMaeConcepto AND e.bEstado=1 AND f.bEstado=1
+	INNER JOIN sisaguasaniamiento.maecategoria AS g ON g.cCodMaeCategoria=e.cCodMaeCategoria AND g.bEstado=1
+ /*	WHERE f.cCodMaeConcepto='00003' AND c.cCodMaeCategoria='00001'*/
+) as h ON a.iIdValConcepto=h.iIdValConcepto]]>
+	</queryString>
+	<field name="cCodRegContribuyente" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nvRazoSocial" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="iIdEjercicio" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dtFechVencimiento" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="concepto" class="java.lang.String"/>
+	<field name="categoria" class="java.lang.String"/>
+	<field name="deTotaInsoluto" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="158" y="13" width="345" height="33" uuid="fa834c2d-044b-42b6-8917-0d4d87bb07d9"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[REPORTE MOROSOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="100" y="46" width="174" height="22" uuid="1995c08a-4d7d-43bc-ae48-4cc3851af16e"/>
+				<text><![CDATA[Leaf Green SubTitle]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="bc92307c-309a-4d24-9bc8-b70a3ee7ba64"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="19" width="79" height="15" uuid="73e71477-87a4-4262-9242-4a947e68663d"/>
+				<text><![CDATA[Codigo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="79" y="19" width="79" height="15" uuid="7412b1d4-9a87-473e-94c5-7f86e1b31496"/>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="158" y="19" width="79" height="15" uuid="44f10858-2928-4734-8e50-b7c76815ecca"/>
+				<text><![CDATA[Ejercicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="237" y="19" width="79" height="15" uuid="feec446f-cb14-4eb0-85b8-f6947d03bdf3"/>
+				<text><![CDATA[Vencimiento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="316" y="19" width="79" height="15" uuid="eaf9f04d-8c56-497a-b2cb-ff2adc43a06e"/>
+				<text><![CDATA[concepto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="395" y="19" width="79" height="15" uuid="31999ef4-357a-4a19-9210-cad7c42148b3"/>
+				<text><![CDATA[categoria]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="474" y="19" width="79" height="15" uuid="172237f4-b496-42bd-a5d8-f4180cc56171"/>
+				<text><![CDATA[Deuda]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="ee930cdc-a59f-4791-9571-54d03fb88ae1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="0" y="0" width="79" height="15" uuid="858ba57e-8def-420c-8be5-fdad0d57ae0a"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cCodRegContribuyente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="79" y="0" width="79" height="15" uuid="86ccff27-8103-4cdf-98fd-7019c0d33c1b"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nvRazoSocial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="158" y="0" width="79" height="15" uuid="3834f859-fcb2-4d84-9916-d61d2d456985"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{iIdEjercicio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="237" y="0" width="79" height="15" uuid="4b9606a1-9d55-4ee3-a6e1-9c8a6bc8d9fb"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtFechVencimiento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="316" y="0" width="79" height="15" uuid="e46c992f-1077-43c1-abee-3d503941fcce"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{concepto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="395" y="0" width="79" height="15" uuid="7ed4be73-e063-4eee-b1f9-9b7baf29328f"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{categoria}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="474" y="0" width="79" height="15" uuid="26d9bb76-1190-4224-a1db-f4065fc6e18b"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{deTotaInsoluto}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="31cf373d-a754-42a8-a088-ae0fd5a479f9"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="2a8ceeb7-cda6-4c66-86d1-912c34bf8f6e"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="b3343839-9534-4a5e-bbf7-113937d58f7c"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="1e22c645-e92f-42a6-9b80-6f5852481e41"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
